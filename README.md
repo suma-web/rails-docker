@@ -15,21 +15,18 @@
 FROM ruby:3.2.2
 
 # パッケージのインストールと更新
-RUN apt-get update && apt-get install -y nodejs --no-install-recommends && rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install -y postgresql-client --no-install-recommends && rm -rf /var/lib/apt/lists/*
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
+RUN apt-get update -qq && apt-get install -y --no-install-recommends nodejs postgresql-client build-essential libpq-dev && rm -rf /var/lib/apt/lists/*
 
 # 作業ディレクトリの指定
-WORKDIR /myproject
+WORKDIR /myapp
 
 # fileの追加
-ADD Gemfile /myproject/Gemfile
-ADD Gemfile.lock /myproject/Gemfile.lock
+COPY Gemfile Gemfile.lock ./
 
 # gemをインストールする際のコマンド
 RUN bundle install　　　
 
-ADD . /myproject
+COPY . /myapp
 ```
 
 
@@ -89,7 +86,7 @@ ruby "3.2.2"gem
 8\. `rails db:migrate`でデータベースの更新。
 
 9\. 最終確認
-ブラウザ上で`lacalhost:3000`にアクセス。ブラウザ上でアプリケーションが確認できれば完成です。
+ブラウザ上で`http://localhost:3000`にアクセス。ブラウザ上でアプリケーションが確認できれば完成です。
 
 これでrailsアプリをDocker化する手順は以上です。お疲れ様でした。
 
